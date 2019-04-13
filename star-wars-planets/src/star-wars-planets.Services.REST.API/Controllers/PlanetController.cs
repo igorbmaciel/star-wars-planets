@@ -2,6 +2,7 @@
 using star_wars_planets.Application.ViewModels;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -19,13 +20,13 @@ namespace star_wars_planets.Services.REST.API.Controllers
         [HttpPost]
         [Route("Planet")]
         [ResponseType(typeof(PlanetViewModel))]
-        public HttpResponseMessage Post([FromBody]PlanetViewModel planetViewModel)
+        public async Task<HttpResponseMessage> Post([FromBody]PlanetViewModel planetViewModel)
         {
             var configuration = new HttpConfiguration();
             var request = new HttpRequestMessage();
             request.Properties[System.Web.Http.Hosting.HttpPropertyKeys.HttpConfigurationKey] = configuration;
 
-            var planet = _planetAppService.Add(planetViewModel);
+            var planet = await _planetAppService.Add(planetViewModel);
 
             return request.CreateResponse(HttpStatusCode.OK, planet);
         }
